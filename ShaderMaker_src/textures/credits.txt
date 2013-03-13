@@ -1,0 +1,7 @@
+These texture images are taken from the exercises of
+the lecture 'Computergraphics 2' at
+
+http://zach.in.tu-clausthal.de/teaching/cg2_07/index.html
+
+Credits go to the original author.
+
