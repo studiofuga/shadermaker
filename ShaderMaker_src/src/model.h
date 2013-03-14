@@ -39,8 +39,10 @@ class IModel
 public:
 	// factory
 	static IModel* createPoint( void ); // a single point located in the origin.
-	static IModel* createPlane( void );
+    static IModel* createPlane( void );
+    static IModel* createPlane( int level );
 	static IModel* createCube ( void );
+    static IModel* createCube ( int level );
 	static IModel* createSphere( int numRings, int numSegments, float radius );
 	static IModel* createTorus ( int numRings, int numSegments, float radius1, float radius2  );
 	virtual ~IModel( void ) {} ///< Destructor.

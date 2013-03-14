@@ -74,6 +74,7 @@ private slots:
 	void setGeometryOutputType( int index );
 	void setProjectionMode( int index );
 	void setFov( int index );
+    void setVertexDensity();
 
 private:
 
@@ -94,6 +95,7 @@ private:
 	QPushButton*	m_btnLoadMesh;
 	QLabel*			m_labPrimitiveType;
 	QGroupBox*		m_groupGeometryShader;
+    QLineEdit*      m_vertexDensity;
 
 	// test models are stored here.
 	IModel**	m_models; // [ m_numModels ]
@@ -101,6 +103,7 @@ private:
 	IMeshModel*	m_meshModel; // this points into m_models !!!!
 	int			m_meshModelIndex; // index into m_models
 	QString		m_meshFileName;
+    int         m_vertexDensityLevel;
 
 	// the scene to modify
 	IScene*		m_scene;

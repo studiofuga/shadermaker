@@ -366,6 +366,10 @@ void CBaseModel::buildPlane( vec3_t* v, vec3_t* n, vec2_t*t, vec4_t* c,
 //=============================================================================
 //	cube test model
 //=============================================================================
+IModel* IModel::createCube( void )
+{
+    createCube(7);
+}
 
 //======================
 /** Creates a cube model.
@@ -376,9 +380,8 @@ void CBaseModel::buildPlane( vec3_t* v, vec3_t* n, vec2_t*t, vec4_t* c,
  * The face normals point out of the cube.
  */
 //======================
-IModel* IModel::createCube( void )
+IModel* IModel::createCube( int level )
 {
-	int level = 4;
 	int vertexCount = CBaseModel::vertexCountForPlaneLevel( level );
 	IVertexStream* v = IVertexStream::create( vertexCount * 6 );
 
@@ -533,6 +536,10 @@ IModel* IModel::createCube( void )
 //	plane test model
 //=============================================================================
 
+IModel* IModel::createPlane( void )
+{
+    createPlane(7);
+}
 
 //======================
 /** Creates a tesselated quad located in the Z=0 plane.
@@ -541,9 +548,8 @@ IModel* IModel::createCube( void )
  * The texture coordinates cover th entire quad.
  */
 //======================
-IModel* IModel::createPlane( void )
+IModel* IModel::createPlane( int level )
 {
-	int level = 4;
 	IVertexStream* v = IVertexStream::create( CBaseModel::vertexCountForPlaneLevel(level) );
 
 	// vertices

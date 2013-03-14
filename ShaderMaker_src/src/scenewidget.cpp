@@ -17,6 +17,8 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QLineEdit>
+#include <QValidator>
 
 #include "application.h"
 #include "scene.h"
@@ -38,6 +40,7 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	m_meshModelIndex = -1;
 	m_meshModel = NULL;
 	m_meshFileName = QString( "" );
+    m_vertexDensityLevel=7;
 
 	//
 	// setup geometry state widgets
@@ -52,8 +55,9 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	m_activeModel         = new QComboBox();
 	QLabel* testModelText = new QLabel( "Test Model:" );
 	QGroupBox* groupModel = new QGroupBox( "Geometry Processing" );
+    m_vertexDensity       = new QLineEdit("7");
 	QGridLayout* groupModelLayout = new QGridLayout();
-	groupModelLayout->addWidget( testModelText,        0,0, 1,1 );
+    groupModelLayout->addWidget( testModelText,        0,0, 1,1 );
 	groupModelLayout->addWidget( m_activeModel,        0,1, 1,1 );
 	groupModelLayout->addWidget( m_chkUseProgram,      1,0, 1,2 );
 	groupModelLayout->addWidget( m_chkWireframe,       2,0, 1,2 );
@@ -62,6 +66,8 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	groupModelLayout->addWidget( m_chkShowNormals,     5,0, 1,2 );
 	groupModelLayout->addWidget( m_chkShowBoundingBox, 6,0, 1,2 );
 	groupModelLayout->addWidget( m_chkShowTangents,    7,0, 1,2 );
+    groupModelLayout->addWidget( new QLabel("Vertex Density(1,20):"),      8,0, 1,1 );
+    groupModelLayout->addWidget( m_vertexDensity,      8,1, 1,1 );
 	groupModel->setLayout( groupModelLayout );
 
 	// setup tool tips
@@ -72,6 +78,7 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	m_chkShowTangents->   setToolTip( "Draws the tangent space vectors for each vertex.\nTangent in red, bitangent in green, normal in blue" );
 	m_chkShowNormals->    setToolTip( "Draws the normal of each vertex.\nThe color is choosen from the greatest normal component." );
 	m_chkShowBoundingBox->setToolTip( "Draws the model's bounding box.\nRed == X axis, green == Y axis, blue == Z axis." );
+    m_vertexDensity->     setToolTip( "How many triangles should be drawn");
 
 	//
 	// setup projection mode group
@@ -161,6 +168,10 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	pal.setColor( QPalette::Button, QColor(0,0,0) );
 	m_btnClearColor->setPalette( pal );
 
+    // initial vertex density
+    m_vertexDensity->setValidator(new QIntValidator(-1,100));
+    m_vertexDensity->setReadOnly(false);
+
 	// setup signals
 	connect( m_chkUseProgram,      SIGNAL(stateChanged(int)),        this, SLOT(checkUseProgram(int)) );
 	connect( m_chkWireframe,       SIGNAL(stateChanged(int)),        this, SLOT(checkWireframe(int)) );
@@ -176,6 +187,7 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	connect( m_geometryOutputType, SIGNAL(currentIndexChanged(int)), this, SLOT(setGeometryOutputType(int)) );
 	connect( m_projectionMode,     SIGNAL(currentIndexChanged(int)), this, SLOT(setProjectionMode(int)) );
 	connect( m_fov,                SIGNAL(currentIndexChanged(int)), this, SLOT(setFov(int)) );
+    connect(m_vertexDensity,       SIGNAL(editingFinished()),        this, SLOT(setVertexDensity()));
 }
 
 CSceneWidget::~CSceneWidget( void )
@@ -507,5 +519,31 @@ resetCamera
 void CSceneWidget::resetCamera( bool )
 {
 	m_scene->getCameraState()->resetCamera();
+}
+
+void CSceneWidget::setVertexDensity(){
+    const QString &text=m_vertexDensity->text();
+    // Check density range
+    int density=atoi(text.toStdString().c_str());
+    if(density>14|| density<1){
+        QMessageBox* box = new QMessageBox();
+        box->setWindowTitle(QString("Out of range"));
+        box->setText(QString("The density should be in range of 1-14. default is 7.\nCurrent Text:\""+text+"\""));
+        box->show();
+
+        // restor it.
+        m_vertexDensity->setText("7");
+        return;
+    }
+    // set density
+    m_vertexDensityLevel=density;
+
+    // rebuild plane and cube;
+    IModel* plane= m_models[1];
+    IModel* cube = m_models[2];
+    m_models[1] = IModel::createPlane();
+    m_models[2] = IModel::createCube();
+//    delete plane;
+//    delete cube;
 }
 
