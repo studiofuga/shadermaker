@@ -368,7 +368,7 @@ void CBaseModel::buildPlane( vec3_t* v, vec3_t* n, vec2_t*t, vec4_t* c,
 //=============================================================================
 IModel* IModel::createCube( void )
 {
-    createCube(7);
+    return createCube(7);
 }
 
 //======================
@@ -538,7 +538,7 @@ IModel* IModel::createCube( int level )
 
 IModel* IModel::createPlane( void )
 {
-    createPlane(7);
+    return createPlane(7);
 }
 
 //======================
@@ -583,6 +583,52 @@ IModel* IModel::createPlane( int level )
 		vec3_t( -1,-1,0 ), vec3_t( 1,1,0 ), sqrtf( 2.0f ), v );
 }
 
+
+IModel *IModel::createLineStrip() {
+    // vertices
+    static vec3_t vIn[] =
+    {
+        vec3_t( -1,-1, 0 ), vec3_t( +1,-1, 0 ),
+        vec3_t( -1, 0, 0 ), vec3_t(  1, 0, 0 ),
+        vec3_t( -1,+1, 0 ), vec3_t( +1,+1, 0 ),
+    };
+
+    // texcoords
+    static vec2_t tIn[] =
+    {
+        vec2_t( 0,1 ), vec2_t( 1,1 ),
+        vec2_t( 0,0.5), vec2_t(1,0.5),
+        vec2_t( 0,0 ), vec2_t( 1,0 ),
+    };
+
+    // colors
+    static vec4_t cIn[] =
+    {
+        vec4_t( 1,1,1,1 ), vec4_t( 1,1,1,1 ), // all white
+        vec4_t( 1,1,1,1 ), vec4_t( 1,1,1,1 ),
+        vec4_t( 1,1,1,1 ), vec4_t( 1,1,1,1 ),
+    };
+
+    /*
+    CBaseModel::buildPlane( v->v(), v->n(), v->t(), v->c(),
+                            vIn, vec3_t(0,0,1), tIn, cIn,
+                            level );
+
+        v->coumputeTangentVectors();
+*/
+
+    int n = sizeof(vIn) / sizeof(vIn[0]) ;
+    IVertexStream* v = IVertexStream::create( n );
+    for (int i = 0; i < n; ++i) {
+        v->v()[i] = vIn[i];
+        v->t()[i] = tIn[i];
+        v->c()[i] = cIn[i];
+    }
+
+    return new CBaseModel( QString( "LineStrip" ), GL_LINE_STRIP,
+        vec3_t( -1,-1,0 ), vec3_t( 1,1,0 ), sqrtf( 2.0f ), v );
+
+}
 
 //=============================================================================
 //	sphere test model

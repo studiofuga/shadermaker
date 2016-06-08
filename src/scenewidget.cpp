@@ -215,7 +215,7 @@ void CSceneWidget::init( void )
 	m_meshFileName = QString( "" );
 
 	// create destmodels
-	m_numModels = 6;
+    m_numModels = 7;
 	m_meshModelIndex = 5;
 	m_models    = new IModel* [ m_numModels ];
 	m_models[0] = IModel::createPoint();
@@ -224,6 +224,7 @@ void CSceneWidget::init( void )
 	m_models[3] = IModel::createSphere( 32, 64, 1.0f );
 	m_models[4] = IModel::createTorus( 32, 24, 1.0f, 0.5f );
 	m_models[5] = m_meshModel = IMeshModel::createMeshModel();
+    m_models[6] = IModel::createLineStrip();
 
 	// setup combo box
 	for( int i = 0 ; i < m_numModels ; i++ )

@@ -41,6 +41,8 @@ public:
 	static IModel* createPoint( void ); // a single point located in the origin.
     static IModel* createPlane( void );
     static IModel* createPlane( int level );
+    static IModel* createLineStrip ();
+    static IModel* createLineStrip (int level);
 	static IModel* createCube ( void );
     static IModel* createCube ( int level );
 	static IModel* createSphere( int numRings, int numSegments, float radius );
