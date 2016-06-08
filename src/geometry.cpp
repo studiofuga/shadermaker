@@ -31,9 +31,11 @@ QString IModel::primitiveTypeName( int primitiveType )
 	switch( primitiveType )
 	{
 	case GL_POINTS:			return QString( "GL_POINTS" ); break;
-	case GL_LINES:			return QString( "GL_LINES:" ); break;
+    case GL_LINES:			return QString( "GL_LINES" ); break;
 	case GL_LINE_STRIP:		return QString( "GL_LINE_STRIP" ); break;
-	case GL_LINE_LOOP:		return QString( "GL_LINE_LOOP" ); break;
+    case GL_LINE_STRIP_ADJACENCY:
+                            return QString( "GL_LINE_STRIP_ADJACENCY" ); break;
+    case GL_LINE_LOOP:		return QString( "GL_LINE_LOOP" ); break;
 	case GL_TRIANGLES:		return QString( "GL_TRIANGLES" ); break;
 	case GL_TRIANGLE_STRIP:	return QString( "GL_TRIANGLE_STRIP" ); break;
 	case GL_TRIANGLE_FAN:	return QString( "GL_TRIANGLE_FAN" ); break;
@@ -584,7 +586,7 @@ IModel* IModel::createPlane( int level )
 }
 
 
-IModel *IModel::createLineStrip() {
+IModel *IModel::createLineStrip(QString name, GLenum op) {
     // vertices
     static vec3_t vIn[] =
     {
@@ -625,7 +627,7 @@ IModel *IModel::createLineStrip() {
         v->c()[i] = cIn[i];
     }
 
-    return new CBaseModel( QString( "LineStrip" ), GL_LINE_STRIP,
+    return new CBaseModel( name, op,
         vec3_t( -1,-1,0 ), vec3_t( 1,1,0 ), sqrtf( 2.0f ), v );
 
 }
