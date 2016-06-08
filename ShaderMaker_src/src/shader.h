@@ -124,6 +124,7 @@ public:
 	 *				GL_EXT_geometry_shader4 extension.
 	 */
 	virtual void setGeometryOutputType( int type ) = 0;
+    virtual void setGeometryOutputNum( int type ) = 0;
 
 
 	/** Check wether a given shader type is avilable for this program.

@@ -82,7 +82,7 @@ void CProgramWindow::createGlWidget( void )
 {
 	// make sure we get depth and alpha.
 	QGLFormat fmt;
-	fmt.setDepth( true );
+    fmt.setDepth( true );
 	fmt.setAlpha( true );
 	fmt.setRedBufferSize( 8 );
 	fmt.setGreenBufferSize( 8 );

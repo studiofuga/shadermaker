@@ -131,6 +131,8 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	//
 	m_labPrimitiveType		= new QLabel();
 	m_geometryOutputType	= new QComboBox();
+    m_geometryOutputNum = new QSpinBox();
+    QLabel* primNumText = new QLabel("Numb. outputs:");
 	QLabel* primTypeInText	= new QLabel( "Input Type:" );
 	QLabel* primTypeOutText	= new QLabel( "Output Type:" );
 	QLabel* relinkWarning   = new QLabel( "NOTE: if these values change,\nyou must re-link the program." );
@@ -140,7 +142,11 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	groupGeometryShaderLayout->addWidget( m_labPrimitiveType,	0,1, 1,1 );
 	groupGeometryShaderLayout->addWidget( primTypeOutText,		1,0, 1,1 );
 	groupGeometryShaderLayout->addWidget( m_geometryOutputType,	1,1, 1,1 );
-	groupGeometryShaderLayout->addWidget( relinkWarning,        2,0, 1,2 );
+
+    groupGeometryShaderLayout->addWidget( primNumText,          2,0, 2,1 );
+    groupGeometryShaderLayout->addWidget( m_geometryOutputNum,	2,1, 2,1 );
+
+    groupGeometryShaderLayout->addWidget( relinkWarning,        3,0, 3,2 );
 	m_groupGeometryShader->setLayout( groupGeometryShaderLayout );
 	m_geometryOutputType->addItem( "GL_POINTS",			QVariant( int(GL_POINTS) ) );
 	m_geometryOutputType->addItem( "GL_LINE_STRIP",		QVariant( int(GL_LINE_STRIP) ) );
@@ -186,6 +192,7 @@ CSceneWidget::CSceneWidget( IScene* scene ) : m_scene( scene )
 	connect( m_activeModel,        SIGNAL(currentIndexChanged(int)), this, SLOT(setActiveModel(int)) );
 	connect( m_geometryOutputType, SIGNAL(currentIndexChanged(int)), this, SLOT(setGeometryOutputType(int)) );
 	connect( m_projectionMode,     SIGNAL(currentIndexChanged(int)), this, SLOT(setProjectionMode(int)) );
+    connect( m_geometryOutputNum,SIGNAL(valueChanged(int)), this, SLOT(setGeometryOutputNum(int)));
 	connect( m_fov,                SIGNAL(currentIndexChanged(int)), this, SLOT(setFov(int)) );
     connect(m_vertexDensity,       SIGNAL(editingFinished()),        this, SLOT(setVertexDensity()));
 }
@@ -407,6 +414,10 @@ void CSceneWidget::setGeometryOutputType( int index )
 	}
 }
 
+void CSceneWidget::setGeometryOutputNum(int n)
+{
+    m_scene->getShader()->setGeometryOutputNum(n);
+}
 
 /*
 ========================

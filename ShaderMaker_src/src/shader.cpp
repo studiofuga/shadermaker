@@ -102,6 +102,7 @@ public:
 	void setShaderSource( int shaderType, const QString & source );
 	void setGeometryInputType( int type );
 	void setGeometryOutputType( int type );
+    void setGeometryOutputNum( int type );
 
 	// linking
 	bool compileAndLink( void );
@@ -160,6 +161,7 @@ private:
 	QTime m_timer;
 
 	// program parameters
+    int m_num_output;
 	int m_geometryInputType; // for geometry shader
 	int m_geometryOutputType;
 
@@ -182,7 +184,8 @@ CShader::CShader( void )
 	m_program = 0;
 	m_linked = false;
 
-	m_geometryInputType  = GL_TRIANGLES;
+    m_num_output = 4;
+    m_geometryInputType  = GL_LINE_STRIP_ADJACENCY;
 	m_geometryOutputType = GL_TRIANGLE_STRIP;
 
 	for( int i = 0 ; i < MAX_SHADER_TYPES ; i++ )
@@ -502,10 +505,10 @@ void CShader::setupProgramParameters( void )
 	if( m_geometryShaderAvailable )
 	{
 		// query maximum
-		glGetIntegerv( GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &n );
+        glGetIntegerv( GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &n );
 
 		// set maximum. may be inefficient, but of universal use.
-		glProgramParameteriEXT( m_program, GL_GEOMETRY_VERTICES_OUT_EXT, n );
+        glProgramParameteriEXT( m_program, GL_GEOMETRY_VERTICES_OUT_EXT, m_num_output );
 
 		// set primitive types
 		glProgramParameteriEXT( m_program, GL_GEOMETRY_INPUT_TYPE_EXT,  m_geometryInputType );
@@ -562,7 +565,12 @@ void CShader::setGeometryOutputType( int type )
 	case GL_TRIANGLE_STRIP:
 		m_geometryOutputType = type;
 		break;
-	}
+    }
+}
+
+void CShader::setGeometryOutputNum(int type)
+{
+    m_num_output = type;
 }
 
 

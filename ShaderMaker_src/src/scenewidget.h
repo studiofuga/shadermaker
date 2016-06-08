@@ -22,7 +22,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QGroupBox>
-
+#include <QSpinBox>
 
 // forward declarations
 class IScene;
@@ -72,7 +72,8 @@ private slots:
 	void selectClearColor( bool );
 	void loadMesh( bool );
 	void setGeometryOutputType( int index );
-	void setProjectionMode( int index );
+    void setGeometryOutputNum ( int index );
+    void setProjectionMode( int index );
 	void setFov( int index );
     void setVertexDensity();
 
@@ -81,7 +82,8 @@ private:
 	// widgets
 	QComboBox*		m_activeModel;
 	QComboBox*		m_geometryOutputType;
-	QComboBox*		m_projectionMode;
+    QSpinBox*		m_geometryOutputNum;
+    QComboBox*		m_projectionMode;
 	QComboBox*		m_fov;
 	QCheckBox*		m_chkUseProgram;
 	QCheckBox*		m_chkWireframe;
@@ -93,7 +95,7 @@ private:
 	QPushButton*	m_btnClearColor;
 	QPushButton*	m_btnResetCamera;
 	QPushButton*	m_btnLoadMesh;
-	QLabel*			m_labPrimitiveType;
+    QLabel*         m_labPrimitiveType;
 	QGroupBox*		m_groupGeometryShader;
     QLineEdit*      m_vertexDensity;
 
